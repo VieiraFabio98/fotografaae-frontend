@@ -98,7 +98,7 @@ export default function Home() {
                     value={email} 
                     onChange={(e) => setEmail(e.target.value)}/>
                 </div>
-                <div className="w-64 py-2">
+                <div className="w-64 py-2 mb-3">
                   <Input 
                     id="password" 
                     type="password" 
@@ -110,9 +110,9 @@ export default function Home() {
                   <label className="flex items-center text-xs"><Checkbox className="mr-1"></Checkbox>Lembre de mim</label>
                   <a href="#" className="text-xs hover:text-violet-500">Esqueceu sua senha ?</a>
                 </div>
-                <div className="flex justify-between w-64">
-                  <Button className="bg-violet-500 hover:bg-violet-700" onClick={handleLoginClick}>Entrar</Button>
-                  <Button className="bg-violet-500 hover:bg-violet-700" onClick={handleRegisterClick}>Cadastrar</Button>
+                <div className="flex justify-between w-64 gap-x-4">
+                  <Button className="bg-violet-500 w-32 hover:bg-violet-700" onClick={handleLoginClick}>Entrar</Button>
+                  <Button className="bg-violet-500 w-32 hover:bg-violet-700" onClick={handleRegisterClick}>Cadastrar</Button>
                 </div>
                 <Toaster />
               </div>
