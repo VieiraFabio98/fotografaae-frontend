@@ -13,6 +13,13 @@ export default function Register() {
   const [categories, setCategories] = useState<{ value: string; label: string }[]>([])
   const [selectedCategories, setSelectedCategories] = useState<string[]>()
 
+  const [name, setName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [cpf, setCpf] = useState("")
+  const [email, setEmail] = useState("")
+  const [phone, setPhone] = useState("")
+  const [description, setDescription] = useState("")
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,6 +61,7 @@ export default function Register() {
                     id="name"
                     className="border border-gray-300 rounded-lg p-2"
                     placeholder="Nome"
+                    onChange={(e) => setName(e.target.value)}
                   />
                 </div>
                 <div className="grid w-full max-w-sm items-start gap-1.5">
@@ -63,6 +71,7 @@ export default function Register() {
                     id="lastName"
                     className="border border-gray-300 rounded-lg p-2"
                     placeholder="Sobrenome"
+                    onChange={(e) => setLastName(e.target.value)}
                   />
                 </div>
               </div>
@@ -75,17 +84,17 @@ export default function Register() {
                     id="cpf"
                     className="border border-gray-300 rounded-lg p-2 w-full"
                     placeholder="CPF"
+                    onChange={(e) => setCpf(e.target.value)}
                   />
                 </div>
                 <div className="flex flex-col w-2/3 items-start gap-1.5">
-                  <Label htmlFor="categories" className="text-left">Categorias</Label>
+                  <Label htmlFor="categories" className="text-left">Categorias de Fotografia</Label>
                   <MultiSelect
                     className="text-gray-600 w-full"
                     placeholder="algo"
                     options={categories}
                     onValueChange={setSelectedCategories}
                     defaultValue={selectedCategories}
-                    
                     animation={2}
                     maxCount={5}
                   />
@@ -100,6 +109,7 @@ export default function Register() {
                     id="email"
                     className="border border-gray-300 rounded-lg p-2 w-full"
                     placeholder="Email"
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <div className="grid w-full max-w-sm items-start gap-1.5">
@@ -109,6 +119,7 @@ export default function Register() {
                     id="telefone"
                     className="border border-gray-300 rounded-lg p-2"
                     placeholder="(99)99999-9999"
+                    onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
               </div>
@@ -118,7 +129,7 @@ export default function Register() {
                 <Textarea
                   id="descricao"
                   className="border border-gray-300 rounded-lg p-2"
-                  placeholder=""
+                  onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
 
