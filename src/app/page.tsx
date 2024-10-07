@@ -1,18 +1,74 @@
 "use client"
 import { Button } from "@/components/ui/button"
-import { FaFacebookF, FaGoogle, FaEnvelope } from "react-icons/fa"
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useState } from "react";
+import { FaFacebookF, FaGoogle } from "react-icons/fa"
+import { Input } from "@/components/ui/input"
+import { Checkbox } from "@/components/ui/checkbox"
+import { useState } from "react"
+import { useToast } from "@/hooks/use-toast"
+import { Toaster } from "@/components/ui/toaster"
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
+
+  const { toast } = useToast()
+  const router = useRouter()
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleLoginClick = () => {
-    console.log("Email:", email)
-    console.log("Senha:", password)
+  const handleLoginClick = async () => {
+    const valid = validateLogin(email, password)
+    if(!valid) {
+      toast({
+        title: "Erro de Login",
+        description: "Email ou senha inválidos.",
+        duration: 3000,
+      })
+      return
+    }
+
+    try {
+      const response = await fetch("http://localhost:3333/sessions", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ login: email, password: btoa(password) })
+      })
+
+      if(response.status === 200) {
+        const data = await response.json()
+        localStorage.setItem("token", data.token)
+        localStorage.setItem("refreshToken", data.refreshToken)
+        localStorage.setItem("user", JSON.stringify(data.user))
+      } else {
+        toast({
+          title: "Erro de Login",
+          description: "Ocorreu um erro com o servidor.",
+          duration: 3000,
+        })
+      }
+    
+    } catch(e) {
+      console.log(e)
+    }
+  }
+
+  function validateLogin(email: string, password: string) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return false
+    }
+
+    if (password.length < 5) {
+      return false
+    }  
+
+    return true
+  }
+
+  const handleRegisterClick = () => {
+    router.push("/register")
   }
 
   return (
@@ -20,7 +76,7 @@ export default function Home() {
       <main className="flex felx-col items-center justify-center w-full flex-1 px-20 text-center">
         <div className="bg-white rounded-2xl shadow-2xl flex flex-row w-2/3 max-w-4xl">
           <div className="w-3/5 p-5">
-            <div className="text-left font-bold"><span className="text-violet-500">Fotografa</span> Ae!</div>
+            <div className="text-left font-bold text-2xl"><span className="text-violet-500">Fotografa</span> Ae!</div>
             <div className="py-10">
               <h2 className="text-3xl font-bold text-violet-300">Login</h2>
               <div className="border-2 w-10 border-violet-300 inline-block"></div>
@@ -52,9 +108,13 @@ export default function Home() {
                 </div>
                 <div className="flex justify-between w-64 mb-5">
                   <label className="flex items-center text-xs"><Checkbox className="mr-1"></Checkbox>Lembre de mim</label>
-                  <a href="#" className="text-xs ">Esqueceu sua senha ?</a>
+                  <a href="#" className="text-xs hover:text-violet-500">Esqueceu sua senha ?</a>
                 </div>
-                <Button className="bg-violet-500 hover:bg-violet-700" onClick={handleLoginClick}>Entrar</Button>
+                <div className="flex justify-between w-64">
+                  <Button className="bg-violet-500 hover:bg-violet-700" onClick={handleLoginClick}>Entrar</Button>
+                  <Button className="bg-violet-500 hover:bg-violet-700" onClick={handleRegisterClick}>Cadastrar</Button>
+                </div>
+                <Toaster />
               </div>
             </div>
           </div>
