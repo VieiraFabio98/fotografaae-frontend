@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import { Input } from "@/components/ui/input"
@@ -44,6 +45,35 @@ export default function Register() {
 
     fetchData()
   }, [])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const data = {
+      name,
+      lastName,
+      cpf,
+      email,
+      telephone: phone,
+      description,
+      categories: selectedCategories
+    }
+
+    try {
+      const response = await fetch("http://localhost:3333/photographers", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+
+      console.log(response)
+    } catch(error) {
+      console.log(error)
+    }
+
+  }
   
   return (
     <div className="bg-violet-200 min-h-screen py-2 flex items-center flex-col">
@@ -51,7 +81,7 @@ export default function Register() {
         <div className="bg-white rounded-2xl shadow-2xl flex flex-row w-2/3 max-w-3xl">
           <div className="w-full p-5">
             <h2 className="text-2xl font-bold mb-6 text-left">Informe seus dados</h2>
-            <form className="flex flex-col gap-4">
+            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
 
               <div className="flex flex-row gap-4">
                 <div className="grid w-full max-w-sm items-start gap-1.5">
@@ -91,7 +121,6 @@ export default function Register() {
                   <Label htmlFor="categories" className="text-left">Categorias de Fotografia</Label>
                   <MultiSelect
                     className="text-gray-600 w-full"
-                    placeholder="algo"
                     options={categories}
                     onValueChange={setSelectedCategories}
                     defaultValue={selectedCategories}
@@ -118,7 +147,7 @@ export default function Register() {
                     type="tel"
                     id="telefone"
                     className="border border-gray-300 rounded-lg p-2"
-                    placeholder="(99)99999-9999"
+                    placeholder="(99) 99999-9999"
                     onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
